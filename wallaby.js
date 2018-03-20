@@ -14,6 +14,10 @@ module.exports = wallaby => {
             '.env',
             'src/**/*.snap',
             '!src/**/*.test.js',
+            {
+                pattern: 'node_modules/jest-serializer-path/**',
+                instrument: false,
+            },
         ],
 
         tests: [
@@ -37,6 +41,8 @@ module.exports = wallaby => {
 
             process.env.NODE_ENV = 'test';
             const jestConfig = require('./jest.config');
+            const path = require('path');
+            jestConfig.snapshotSerializers[0] = path.join(process.cwd(), 'node_modules', jestConfig.snapshotSerializers[0]);
             w.testFramework.configure(jestConfig);
         },
     };
